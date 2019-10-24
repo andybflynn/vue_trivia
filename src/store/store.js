@@ -9,7 +9,8 @@ const store = new Vuex.Store({
     score: 0,
     showFinal: false,
     currentQuestionIndex: 0,
-    showAnswer: 0
+    showAnswer: 0,
+    selectedAnswerIndex: null,
   },
   getters: {
     totalQuestions(state) {
@@ -19,7 +20,8 @@ const store = new Vuex.Store({
       return state.questions[id];
     },
     currentQuestionIndex: state => state.currentQuestionIndex,
-    showAnswer: state => state.showAnswer
+    showAnswer: state => state.showAnswer,
+    selectedAnswerIndex: state => state.selectedAnswerIndex,
   },
   mutations: {
     setQuestions(state, questions) {
@@ -34,6 +36,7 @@ const store = new Vuex.Store({
         state.score = 0;
         state.showAnswer = false;
         state.currentQuestionIndex = 0;
+        state.selectedAnswerIndex = null
       }
     },
     setShowAnswer: state => {
@@ -42,6 +45,13 @@ const store = new Vuex.Store({
     nextQuestion: state => {
       state.currentQuestionIndex++;
       state.showAnswer = false;
+      state.selectedAnswerIndex = null
+    },
+    clearQuestions: state => {
+      state.questions = [];
+    },
+    setSelectedAnswer: (state, index) => {
+      state.selectedAnswerIndex = index;
     }
   },
   actions: {
@@ -58,6 +68,7 @@ const store = new Vuex.Store({
       }, 1000);
     },
     reset(context) {
+      context.commit("clearQuestions");
       context.dispatch("fetchQuestions");
       context.commit("setEndGame", false);
     }

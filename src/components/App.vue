@@ -2,7 +2,7 @@
   <div id="app">
     <ScoreDisplay></ScoreDisplay>
     <div class="quiz">
-      <h1>Quiz questions using Vue and Vuex!</h1>
+      <h1>Test your knowledge: Trivia Questions</h1>
       <Questions></Questions>
     </div>
   </div>

@@ -1,21 +1,21 @@
 <template>
   <div class="questionsAsker" v-if="currentQuestionData">
     <h2>Question: {{currentQuestionNumber}}/{{totalQuestions}}</h2>
+    <button
+      v-if="currentQuestionNumber < totalQuestions && showAnswer"
+      @click="nextQuestion" data-text="Next Question"
+    >Next Question</button>
     <h3 v-html="currentQuestionData.question"></h3>
     <ul class="answers">
       <li
         v-for="(answer, index) in answers"
         :key="index"
-        @click="showCorrectAnswers(answer.correct)"
-        :class="{highlight: answer.correct && showAnswer}"
+        @click="showCorrectAnswers(index, answer.correct)"
+        :class="{highlight: answer.correct && showAnswer, selected: index == selectedAnswerIndex}"
       >
         <span v-html="answer.answer"></span>
       </li>
     </ul>
-    <button
-      v-if="currentQuestionNumber < totalQuestions && showAnswer"
-      @click="nextQuestion" data-text="Next Question"
-    >Next Question</button>
   </div>
 </template>
 
@@ -38,7 +38,8 @@ export default {
       "totalQuestions",
       "questionByIndex",
       "currentQuestionIndex",
-      "showAnswer"
+      "showAnswer",
+      "selectedAnswerIndex",
     ]),
     currentQuestionNumber() {
       return this.currentQuestionIndex + 1;
@@ -63,12 +64,13 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["updateScore", "nextQuestion", "setShowAnswer"]),
+    ...mapMutations(["updateScore", "nextQuestion", "setShowAnswer", "setSelectedAnswer"]),
     ...mapActions(["endGame"]),
-    showCorrectAnswers(isCorrect) {
+    showCorrectAnswers(index, isCorrect) {
       if (isCorrect) {
         this.updateScore();
       }
+      this.setSelectedAnswer(index);
       this.setShowAnswer();
       if (this.currentQuestionNumber === this.totalQuestions) {
         this.endGame();
@@ -95,6 +97,9 @@ export default {
     &.highlight {
       background-color: rebeccapurple;
       color: white;
+    }
+    &.selected {
+      outline: 2px solid rebeccapurple;
     }
     span {
       display: inline-block;
