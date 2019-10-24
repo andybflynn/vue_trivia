@@ -4,6 +4,7 @@
     <button
       v-if="currentQuestionNumber < totalQuestions && showAnswer"
       @click="nextQuestion" data-text="Next Question"
+      ref="nextButton"
     >Next Question</button>
     <h3 v-html="currentQuestionData.question"></h3>
     <ul class="answers">
@@ -11,7 +12,10 @@
         v-for="(answer, index) in answers"
         :key="index"
         @click="showCorrectAnswers(index, answer.correct)"
+        @keypress.enter="showCorrectAnswers(index, answer.correct, true)"
+        @keypress.space="showCorrectAnswers(index, answer.correct, true)"
         :class="{highlight: answer.correct && showAnswer, selected: index == selectedAnswerIndex}"
+        :tabindex="showAnswer ? -1 : 0"
       >
         <span v-html="answer.answer"></span>
       </li>
@@ -66,7 +70,7 @@ export default {
   methods: {
     ...mapMutations(["updateScore", "nextQuestion", "setShowAnswer", "setSelectedAnswer"]),
     ...mapActions(["endGame"]),
-    showCorrectAnswers(index, isCorrect) {
+    showCorrectAnswers(index, isCorrect, focusNext) {
       if (isCorrect) {
         this.updateScore();
       }
@@ -74,6 +78,12 @@ export default {
       this.setShowAnswer();
       if (this.currentQuestionNumber === this.totalQuestions) {
         this.endGame();
+        return
+      }
+      if (focusNext) {
+        this.$nextTick(function() {
+          this.$refs.nextButton.focus();
+        })
       }
     }
   }

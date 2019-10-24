@@ -2,7 +2,7 @@
   <div :class="['score',{final: showFinal}]">
     <div class="text">Your score: {{score}}/{{totalQuestions}}</div>
     <div v-if="showFinal">
-      <button @click="reset" data-text="Reset">Reset</button>
+      <button @click="reset" data-text="Reset" ref="scoreBoard">Reset</button>
     </div>
   </div>
 </template>
@@ -17,6 +17,15 @@ export default {
   },
   methods: {
     ...mapActions(["reset"])
+  },
+  watch: {
+    showFinal() {
+      this.$nextTick(function() {
+        if (this.showFinal) {
+          this.$refs.scoreBoard.focus();
+        }
+      });
+    }
   }
 };
 </script>
