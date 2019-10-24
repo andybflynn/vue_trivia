@@ -1,8 +1,8 @@
 <template>
   <div :class="['score',{final: showFinal}]">
-    <div class="text">Your score: {{score}}/{{totalQuestions}}</div>
+    <div class="text" ref="scoreBoard" tabindex="-1">Your score: {{score}}/{{totalQuestions}}</div>
     <div v-if="showFinal">
-      <button @click="reset" data-text="Reset" ref="scoreBoard">Reset</button>
+      <button @click="reset" data-text="Reset">Reset</button>
     </div>
   </div>
 </template>
@@ -62,5 +62,8 @@ export default {
 .text {
   transform: skew(14deg, 0deg);
   transition: all 0.4s linear;
+  &:focus {
+    outline: none;
+  }
 }
 </style>
