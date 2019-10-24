@@ -1,3 +1,7 @@
+# Parcel build artefacts
+.cache
+serve
+
 # Logs
 logs
 *.log

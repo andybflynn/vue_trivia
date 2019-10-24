@@ -1,0 +1,45 @@
+$buttonColor: #f44336;
+button {
+  font-size: 1em;
+  padding: 1em 2em;
+  border-radius: 5px;
+  position: relative;
+  transition: background-color 0.4s ease;
+  background-color: $buttonColor;
+  color: $buttonColor;
+  overflow: hidden;
+  cursor: pointer;
+  &::before, &::after {
+    content: attr(data-text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    color: white;
+    transition: all 0.3s ease;
+  }
+  &::before {
+    transform: translateX(100%);
+  }
+  &:hover {
+    background-color: darken($buttonColor, 15%);;
+    color: darken($buttonColor, 15%);;
+
+    &::before {
+      content: attr(data-text) " >";
+      transform: translateX(0);
+    }
+    &::after {
+      transform: translateX(-100%);
+    }
+  }
+  &:active {
+    transform: translate(1px, 1px);
+    outline: none;
+    box-shadow: 1px 1px 6px -2px black inset;
+  }
+}
